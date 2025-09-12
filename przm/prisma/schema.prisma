@@ -71,6 +71,7 @@ model TowJob {
   vehicleYear       Int?
   vehicleColor      String?
   licensePlate      String?
+  vin               String?
   
   // Location information
   pickupLocation    String    // Address or description
