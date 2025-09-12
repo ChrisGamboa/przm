@@ -7,6 +7,14 @@ import { Button } from "@/app/components/ui/button";
 import { Progress } from "@/app/components/ui/progress";
 import { Separator } from "@/app/components/ui/separator";
 import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/app/components/ui/dialog";
+import { 
   MapPin, 
   Navigation, 
   Car, 
@@ -28,6 +36,8 @@ interface JobDetailsScreenProps {
   onUpdateStatus?: (jobId: string, newStatus: JobStatus) => void;
   onCollectOnSceneData?: (jobId: string) => void;
   onProcessDropoff?: (jobId: string) => void;
+  onAcceptJob?: (jobId: string) => void;
+  onDeclineJob?: (jobId: string) => void;
   className?: string;
 }
 
@@ -84,8 +94,11 @@ export function JobDetailsScreen({
   onUpdateStatus, 
   onCollectOnSceneData,
   onProcessDropoff,
+  onAcceptJob,
+  onDeclineJob,
   className 
 }: JobDetailsScreenProps) {
+  const [showAcceptConfirmation, setShowAcceptConfirmation] = React.useState(false);
   const statusInfo = statusConfig[job.status];
   
   // Calculate progress percentage based on status
@@ -117,8 +130,44 @@ export function JobDetailsScreen({
 
   const nextStatus = getNextStatus(job.status);
 
+  // Handle accepting a dispatched job
+  const handleAcceptJob = () => {
+    setShowAcceptConfirmation(false);
+    onAcceptJob?.(job.id);
+  };
+
+  // Handle declining a dispatched job
+  const handleDeclineJob = () => {
+    onDeclineJob?.(job.id);
+  };
+
   // Helper function to render the primary CTA button
   const renderPrimaryCTA = () => {
+    // Dispatched Job - Accept/Decline buttons
+    if (job.status === "dispatched") {
+      return (
+        <div className="flex gap-3">
+          <Button 
+            variant="outline"
+            className="flex-1 border-red-200 text-red-700 hover:bg-red-50 shadow-lg"
+            size="lg"
+            onClick={handleDeclineJob}
+          >
+            <XCircle className="h-5 w-5 mr-2" />
+            Decline
+          </Button>
+          <Button 
+            className="flex-1 bg-green-600 hover:bg-green-700 text-white shadow-lg"
+            size="lg"
+            onClick={() => setShowAcceptConfirmation(true)}
+          >
+            <CheckCircle2 className="h-5 w-5 mr-2" />
+            Accept
+          </Button>
+        </div>
+      );
+    }
+
     // On Scene Data Collection - Primary CTA
     if (job.status === "on_scene") {
       return (
@@ -147,7 +196,7 @@ export function JobDetailsScreen({
       );
     }
 
-    // Update Status Button - Show for statuses except completed/cancelled/on_scene/towing
+    // Update Status Button - Show for statuses except completed/cancelled/on_scene/towing/dispatched
     if (job.status !== "completed" && 
         job.status !== "cancelled" && 
         nextStatus) {
@@ -273,8 +322,9 @@ export function JobDetailsScreen({
                   </div>
                 )}
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+                <div>
+                  <div className="text-sm font-medium text-gray-900">Keys</div>
+                  <div className="text-sm text-gray-600 flex items-center gap-2">
                     {job.keysAvailable !== undefined ? (
                       <>
                         {job.keysAvailable ? (
@@ -282,12 +332,12 @@ export function JobDetailsScreen({
                         ) : (
                           <XCircle className="h-4 w-4 text-red-600" />
                         )}
-                        <span className="text-sm text-gray-600">
-                          Keys {job.keysAvailable ? "Available" : "Not Available"}
+                        <span>
+                          {job.keysAvailable ? "Available" : "Not Available"}
                         </span>
                       </>
                     ) : (
-                      <span className="text-sm text-gray-500">Keys availability: Unknown</span>
+                      <span className="text-gray-500">Unknown</span>
                     )}
                   </div>
                 </div>
@@ -320,13 +370,13 @@ export function JobDetailsScreen({
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Created:</span>
-                  <span className="font-medium">{formatTime(job.createdAt)}</span>
+                  <span className="font-medium">{formatTime(new Date(job.createdAt))}</span>
                 </div>
                 
                 {job.scheduledAt && (
                   <div className="flex justify-between">
                     <span className="text-gray-600">Scheduled:</span>
-                    <span className="font-medium">{formatTime(job.scheduledAt)}</span>
+                    <span className="font-medium">{formatTime(new Date(job.scheduledAt))}</span>
                   </div>
                 )}
 
@@ -389,6 +439,36 @@ export function JobDetailsScreen({
           {renderPrimaryCTA()}
         </div>
       )}
+
+      {/* Accept Job Confirmation Modal */}
+      <Dialog open={showAcceptConfirmation} onOpenChange={setShowAcceptConfirmation}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5 text-green-600" />
+              Accept Tow Job
+            </DialogTitle>
+            <DialogDescription>
+              Are you sure you want to accept Job #{job.jobNumber}? Once accepted, 
+              you'll be committed to this tow and the job status will be updated to "En Route".
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2">
+            <Button 
+              variant="outline" 
+              onClick={() => setShowAcceptConfirmation(false)}
+            >
+              Cancel
+            </Button>
+            <Button 
+              className="bg-green-600 hover:bg-green-700" 
+              onClick={handleAcceptJob}
+            >
+              Accept Job
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

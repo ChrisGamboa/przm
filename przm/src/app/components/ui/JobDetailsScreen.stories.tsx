@@ -21,6 +21,8 @@ const meta: Meta<typeof JobDetailsScreen> = {
     onUpdateStatus: { action: 'status updated' },
     onCollectOnSceneData: { action: 'collect on-scene data clicked' },
     onProcessDropoff: { action: 'process dropoff clicked' },
+    onAcceptJob: { action: 'job accepted' },
+    onDeclineJob: { action: 'job declined' },
   },
 };
 
@@ -42,11 +44,13 @@ const baseJob: Job = {
   vin: "1HGBH41JXMN109186",
   keysAvailable: true,
   pickupLocation: "123 Main St, San Francisco, CA 94102",
-  destination: "456 Oak Ave, San Francisco, CA 94103",
+  dropoffLocation: "456 Oak Ave, San Francisco, CA 94103",
   distance: "2.3 miles",
   estimatedTime: "15 mins",
-  createdAt: new Date(2025, 8, 12, 10, 30),
-  scheduledAt: new Date(2025, 8, 12, 11, 0),
+  createdAt: new Date(2025, 8, 12, 10, 30).toISOString(),
+  updatedAt: new Date(2025, 8, 12, 10, 30).toISOString(),
+  scheduledAt: new Date(2025, 8, 12, 11, 0).toISOString(),
+  towerId: "tower-001",
   estimatedCost: 125.50,
   description: "Vehicle broke down on Main Street. Keys are with the customer.",
   driverName: "Mike Johnson",
@@ -69,6 +73,13 @@ export const DispatchedJob: Story = {
     job: {
       ...baseJob,
       status: "dispatched",
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Shows a dispatched job with Accept and Decline buttons. When Accept is clicked, a confirmation modal appears to ensure the tower understands the commitment. Upon confirmation, the job moves to "En Route" status.',
+      },
     },
   },
 };
@@ -159,7 +170,7 @@ export const MinimalInformationJob: Story = {
       licensePlate: undefined,
       vin: undefined,
       keysAvailable: undefined,
-      destination: undefined,
+      dropoffLocation: undefined,
       distance: undefined,
       estimatedTime: undefined,
       scheduledAt: undefined,
@@ -188,7 +199,7 @@ export const LongAddressesJob: Story = {
     job: {
       ...baseJob,
       pickupLocation: "1234 Very Long Street Name That Goes On And On, San Francisco, CA 94102",
-      destination: "5678 Another Extremely Long Address That Tests Text Wrapping, Oakland, CA 94601",
+      dropoffLocation: "5678 Another Extremely Long Address That Tests Text Wrapping, Oakland, CA 94601",
       description: "This is a very long description that tests how the component handles extended text content. The vehicle has multiple issues and requires special handling during the towing process.",
     },
   },

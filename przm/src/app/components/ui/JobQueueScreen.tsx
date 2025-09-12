@@ -78,10 +78,6 @@ export function JobQueueScreen({
     return acc;
   }, {} as Record<JobStatus, number>);
 
-  const urgentJobs = jobs.filter(job => job.priority === "urgent").length;
-  const activeJobs = jobs.filter(job => 
-    ["en_route", "on_scene", "towing"].includes(job.status)
-  ).length;
 
   return (
     <div className={cn("flex flex-col h-screen bg-gray-50", className)}>
@@ -91,7 +87,7 @@ export function JobQueueScreen({
           <div>
             <h1 className="text-xl font-bold text-gray-900">Job Queue</h1>
             <p className="text-sm text-gray-600">
-              {activeJobs} active • {jobs.length} total jobs
+              {jobs.length} total jobs
             </p>
           </div>
           <Button 
@@ -105,23 +101,6 @@ export function JobQueueScreen({
           </Button>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 gap-3 mb-4">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-red-600" />
-              <span className="text-sm font-medium text-red-700">Urgent</span>
-            </div>
-            <div className="text-lg font-bold text-red-900">{urgentJobs}</div>
-          </div>
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-blue-600" />
-              <span className="text-sm font-medium text-blue-700">Active</span>
-            </div>
-            <div className="text-lg font-bold text-blue-900">{activeJobs}</div>
-          </div>
-        </div>
 
         {/* Filter Tabs */}
         <ScrollArea className="w-full whitespace-nowrap">

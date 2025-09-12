@@ -94,6 +94,7 @@ model TowJob {
   licensePlate      String?
   vin               String?
   vehiclePhotoUrl   String?     // URL or path to the uploaded vehicle photo
+  keysAvailable     Boolean?    // Whether vehicle keys are available
   
   // Location information
   pickupLocation    String      // Address or description
