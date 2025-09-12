@@ -26,6 +26,7 @@ type Story = StoryObj<typeof meta>;
 const baseJob: Job = {
   id: '1',
   jobNumber: '21',
+  towerId: 'test-tower-1',
   status: 'en_route',
   priority: 'normal',
   customerName: "Kyle's Motors",
@@ -36,10 +37,11 @@ const baseJob: Job = {
   vehicleColor: 'Blue',
   licensePlate: 'ABC123',
   pickupLocation: '830 South 17th Street, Columbus OH 43206',
-  destination: '830 South 17th Street, Columbus OH 43206',
+  dropoffLocation: '830 South 17th Street, Columbus OH 43206',
   distance: '1241 mi (18 h 4m)',
   estimatedTime: '1 ft (1 min)',
-  createdAt: new Date('2024-01-15T10:55:00'),
+  createdAt: '2024-01-15T10:55:00',
+  updatedAt: '2024-01-15T10:55:00',
   estimatedCost: 150,
   driverName: 'Kyle Ed',
   truckName: 'Richie',
@@ -130,6 +132,7 @@ export const MinimalInfo: Story = {
     job: {
       id: '2',
       jobNumber: '26',
+      towerId: 'test-tower-1',
       status: 'dispatched',
       priority: 'low',
       customerName: 'John Smith',
@@ -138,7 +141,8 @@ export const MinimalInfo: Story = {
       vehicleModel: 'Civic',
       vehicleYear: 2018,
       pickupLocation: 'Main Street Parking Lot',
-      createdAt: new Date('2024-01-15T11:30:00'),
+      createdAt: '2024-01-15T11:30:00',
+      updatedAt: '2024-01-15T11:30:00',
     },
   },
 };
@@ -148,8 +152,34 @@ export const LongLocation: Story = {
     job: {
       ...baseJob,
       jobNumber: '27',
-      pickupLocation: 'Very Long Street Name That Should Truncate Properly in the Mobile Interface, Downtown Business District',
-      destination: 'Another Very Long Address That Should Also Truncate Properly, Uptown Commercial Area',
+      pickupLocation: 'Downtown Business District, 5th & Broadway',
+      dropoffLocation: 'Shopping Center Parking Lot, 890 Commerce Blvd',
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Job card with long location text that should wrap properly on mobile devices without causing horizontal overflow.',
+      },
+    },
+  },
+};
+
+export const ExtremelyLongLocation: Story = {
+  args: {
+    job: {
+      ...baseJob,
+      jobNumber: '28',
+      pickupLocation: 'The Metropolitan Downtown Business Complex at the Intersection of Fifth Avenue and Broadway Street, Near the Historic City Center',
+      dropoffLocation: 'Premium Shopping Center Parking Lot Level 3, Section B, 890 Commerce Boulevard, North Entrance near the Food Court',
+      customerName: 'Downtown Metropolitan Auto Service Center & Emergency Road Assistance LLC',
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Job card with extremely long location and customer names to test the line-clamp functionality at its limits.',
+      },
     },
   },
 };
@@ -158,7 +188,7 @@ export const NoDriverTruck: Story = {
   args: {
     job: {
       ...baseJob,
-      jobNumber: '28',
+      jobNumber: '29',
       driverName: undefined,
       truckName: undefined,
     },
@@ -171,7 +201,7 @@ export const Dispatched: Story = {
       ...baseJob,
       status: 'dispatched',
       priority: 'high',
-      jobNumber: '29',
+      jobNumber: '30',
       description: 'Job dispatched to tower - awaiting acceptance',
     },
   },

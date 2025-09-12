@@ -63,6 +63,19 @@ enum JobPriority {
   URGENT
 }
 
+enum PaymentMethod {
+  CREDIT_CARD
+  CASH
+  CHECK
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
 model TowJob {
   id                String      @id @default(uuid())
   jobNumber         String?      @default(cuid()) // Job tracking number with unique default
@@ -103,15 +116,27 @@ model TowJob {
   driverName        String?     // Assigned driver name
   truckName         String?     // Assigned truck/vehicle name
   
+  // Payment and dropoff information
+  paymentMethod        PaymentMethod?  // Method of payment
+  paymentStatus        PaymentStatus?  @default(PENDING) // Payment processing status
+  paymentAmount        Float?          // Final payment amount
+  paymentTransactionId String?         // Payment processor transaction ID
+  customerSignatureUrl String?         // URL to customer's payment authorization signature
+  impoundLotSignatureUrl String?       // URL to impound lot representative's signature
+  dropoffNotes         String?         // Additional notes from dropoff process
+  
   // Timestamps
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
-  scheduledAt       DateTime?   // When the job is scheduled for
-  completedAt       DateTime?   // When the job was completed
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  scheduledAt          DateTime?   // When the job is scheduled for
+  completedAt          DateTime?   // When the job was completed
+  dropoffCompletedAt   DateTime?   // When the vehicle dropoff was completed
+  paymentCompletedAt   DateTime?   // When the payment was processed
   
   @@index([towerId])
   @@index([status])
   @@index([priority])
   @@index([createdAt])
   @@index([jobNumber])
+  @@index([paymentStatus])
 }

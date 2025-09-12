@@ -9,6 +9,9 @@ export type JobStatus =
 
 export type JobPriority = "low" | "normal" | "high" | "urgent";
 
+// Import payment types
+import type { PaymentMethod, PaymentStatus } from "./payment";
+
 export interface Job {
   id: string;
   jobNumber?: string;
@@ -59,4 +62,15 @@ export interface Job {
     lastName: string;
     towCompany?: string;
   };
+
+  // Payment and dropoff info
+  paymentMethod?: PaymentMethod;
+  paymentStatus?: PaymentStatus;
+  paymentAmount?: number;
+  paymentTransactionId?: string;
+  customerSignatureUrl?: string;
+  impoundLotSignatureUrl?: string;
+  dropoffNotes?: string;
+  dropoffCompletedAt?: string;
+  paymentCompletedAt?: string;
 }

@@ -232,6 +232,72 @@ export async function submitOnSceneData(
 }
 
 /**
+ * Processes dropoff and payment completion
+ */
+export async function processDropoffPayment(
+  jobId: string,
+  data: {
+    paymentMethod: string;
+    paymentAmount: number;
+    paymentTransactionId: string;
+    customerSignatureUrl: string;
+    impoundLotSignatureUrl: string;
+    dropoffNotes?: string;
+    dropoffCompletedAt: string;
+    paymentCompletedAt: string;
+  }
+) {
+  try {
+    // Verify the job exists and belongs to the test user
+    const existingJob = await db.towJob.findFirst({
+      where: {
+        id: jobId,
+        towerId: TEST_USER_ID,
+        status: 'TOWING', // Must be in towing status to process dropoff
+      },
+    });
+
+    if (!existingJob) {
+      throw new Error("Job not found or not in towing status");
+    }
+
+    // Update the job with dropoff and payment data
+    const updatedJob = await db.towJob.update({
+      where: {
+        id: jobId,
+      },
+      data: {
+        // Payment information
+        paymentMethod: data.paymentMethod.toUpperCase() as any,
+        paymentStatus: 'COMPLETED',
+        paymentAmount: data.paymentAmount,
+        paymentTransactionId: data.paymentTransactionId,
+        actualCost: data.paymentAmount, // Set actual cost to payment amount
+        
+        // Signature URLs
+        customerSignatureUrl: data.customerSignatureUrl,
+        impoundLotSignatureUrl: data.impoundLotSignatureUrl,
+        
+        // Notes and timing
+        dropoffNotes: data.dropoffNotes,
+        dropoffCompletedAt: new Date(data.dropoffCompletedAt),
+        paymentCompletedAt: new Date(data.paymentCompletedAt),
+        
+        // Job completion
+        status: 'COMPLETED',
+        completedAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
+
+    return transformTowJobsToJobs([updatedJob])[0];
+  } catch (error) {
+    console.error("Error processing dropoff and payment:", error);
+    throw new Error("Failed to process dropoff and payment");
+  }
+}
+
+/**
  * Gets job statistics for the test user
  */
 export async function getJobStats() {

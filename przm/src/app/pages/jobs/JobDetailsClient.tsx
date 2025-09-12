@@ -34,9 +34,8 @@ export function JobDetailsClient({ job }: JobDetailsClientProps) {
   };
 
   const handleProcessDropoff = (jobId: string) => {
-    // For now, show an alert - this will be implemented later
-    alert("Dropoff processing feature coming soon!");
-    // Future implementation: window.location.href = `/jobs/${jobId}/dropoff`;
+    // Navigate to the dropoff and payment processing page
+    window.location.href = `/jobs/${jobId}/dropoff-payment`;
   };
 
   return (

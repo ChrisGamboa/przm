@@ -9,6 +9,7 @@ declare module 'lucide-react' {
   type Icon = ComponentType<IconProps>;
   
   export const ArrowLeft: Icon;
+  export const ArrowRight: Icon;
   export const Eye: Icon;
   export const MapPin: Icon;
   export const Clock: Icon;
@@ -27,6 +28,16 @@ declare module 'lucide-react' {
   export const Filter: Icon;
   export const SortAsc: Icon;
   export const RefreshCw: Icon;
+  export const Truck: Icon;
+  export const Receipt: Icon;
+  export const CreditCard: Icon;
+  export const Shield: Icon;
+  export const AlertCircle: Icon;
+  export const Banknote: Icon;
+  export const FileText: Icon;
+  export const RotateCcw: Icon;
+  export const Check: Icon;
+  export const Pen: Icon;
   
   // Add other icons as needed
   const lucideReact: {
