@@ -24,9 +24,13 @@ datasource db {
 model User {
   id          String      @id @default(uuid()) // User ID (UUID-based)
   username    String      @unique
+  firstName   String
+  lastName    String
+  towCompany  String?     // Optional for non-tower users
   createdAt   DateTime    @default(now())
 
   credentials Credential[] // Relationship: One user can have many credentials
+  towJobs     TowJob[]    // Relationship: One user (tower) can have many tow jobs
 }
 
 model Credential {
@@ -40,4 +44,55 @@ model Credential {
   
   @@index([credentialId])
   @@index([userId])
+}
+
+enum JobStatus {
+  PENDING
+  ASSIGNED
+  EN_ROUTE
+  ON_SCENE
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model TowJob {
+  id                String    @id @default(uuid())
+  towerId           String    // Foreign key to User (the tower)
+  tower             User      @relation(fields: [towerId], references: [id])
+  
+  // Customer information
+  customerName      String
+  customerPhone     String
+  
+  // Vehicle information
+  vehicleMake       String
+  vehicleModel      String
+  vehicleYear       Int?
+  vehicleColor      String?
+  licensePlate      String?
+  
+  // Location information
+  pickupLocation    String    // Address or description
+  pickupLatitude    Float?
+  pickupLongitude   Float?
+  dropoffLocation   String?   // Destination address
+  dropoffLatitude   Float?
+  dropoffLongitude  Float?
+  
+  // Job details
+  status            JobStatus @default(PENDING)
+  description       String?   // Additional details about the job
+  estimatedCost     Float?
+  actualCost        Float?
+  
+  // Timestamps
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  scheduledAt       DateTime? // When the job is scheduled for
+  completedAt       DateTime? // When the job was completed
+  
+  @@index([towerId])
+  @@index([status])
+  @@index([createdAt])
 }
