@@ -90,6 +90,13 @@ export const OnSceneJob: Story = {
       vin: undefined, // VIN not collected yet
     },
   },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Shows the On Scene status with a prominent CTA button for data collection. The status update button is hidden, making the data collection the primary action.',
+      },
+    },
+  },
 };
 
 export const TowingJob: Story = {
@@ -97,6 +104,13 @@ export const TowingJob: Story = {
     job: {
       ...baseJob,
       status: "towing",
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Shows the Towing status with a prominent CTA button for dropoff processing. The status update button is hidden, making the dropoff processing the primary action.',
+      },
     },
   },
 };
@@ -126,6 +140,13 @@ export const UrgentPriorityJob: Story = {
       priority: "urgent",
       status: "on_scene",
       description: "Emergency tow - vehicle blocking traffic on highway entrance ramp.",
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Urgent priority job in On Scene status. Notice only the data collection CTA button is shown, emphasizing the critical next action.',
+      },
     },
   },
 };
@@ -181,6 +202,13 @@ export const HighPriorityJobWithoutKeys: Story = {
       status: "towing",
       keysAvailable: false,
       description: "High priority tow - vehicle needs to be moved immediately.",
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'High priority job in Towing status without keys. Only the dropoff processing CTA button is shown, focusing on the completion action.',
+      },
     },
   },
 };

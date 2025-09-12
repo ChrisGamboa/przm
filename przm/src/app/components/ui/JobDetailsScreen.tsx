@@ -317,38 +317,42 @@ export function JobDetailsScreen({
 
           {/* Action Buttons */}
           <div className="space-y-3">
-            {/* Update Status Button - Show for most statuses except completed/cancelled */}
-            {job.status !== "completed" && job.status !== "cancelled" && nextStatus && (
-            <Button 
-              className="w-full"
-              onClick={() => onUpdateStatus?.(job.id, nextStatus)}
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Update Status to {statusConfig[nextStatus].label}
-            </Button>
-            )}
-
-            {/* On Scene Data Collection */}
+            {/* On Scene Data Collection - Primary CTA */}
             {job.status === "on_scene" && (
               <Button 
-                variant="outline"
-                className="w-full"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                size="lg"
                 onClick={() => onCollectOnSceneData?.(job.id)}
               >
-                <Car className="h-4 w-4 mr-2" />
+                <Car className="h-5 w-5 mr-2" />
                 Collect VIN, Photos & Verify Plate
               </Button>
             )}
 
-            {/* Towing Dropoff */}
+            {/* Towing Dropoff - Primary CTA */}
             {job.status === "towing" && (
               <Button 
-                variant="outline"
-                className="w-full"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+                size="lg"
                 onClick={() => onProcessDropoff?.(job.id)}
               >
-                <CheckCircle2 className="h-4 w-4 mr-2" />
+                <CheckCircle2 className="h-5 w-5 mr-2" />
                 Process Dropoff & Payment
+              </Button>
+            )}
+
+            {/* Update Status Button - Show for statuses except completed/cancelled/on_scene/towing */}
+            {job.status !== "completed" && 
+             job.status !== "cancelled" && 
+             job.status !== "on_scene" && 
+             job.status !== "towing" && 
+             nextStatus && (
+              <Button 
+                className="w-full"
+                onClick={() => onUpdateStatus?.(job.id, nextStatus)}
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Update Status to {statusConfig[nextStatus].label}
               </Button>
             )}
           </div>
