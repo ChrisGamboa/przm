@@ -180,9 +180,12 @@ export function JobDetailsScreen({
                 )}
 
                 {(job.distance || job.estimatedTime) && (
-                  <div className="flex gap-4 text-sm text-gray-600">
-                    {job.distance && <span>Distance: {job.distance}</span>}
-                    {job.estimatedTime && <span>Est. Time: {job.estimatedTime}</span>}
+                  <div className="space-y-2">
+                    <div className="text-sm font-medium text-gray-900">Trip</div>
+                    <div className="flex gap-4 text-sm text-gray-600">
+                      {job.distance && <span>Distance: {job.distance}</span>}
+                      {job.estimatedTime && <span>Est. Time: {job.estimatedTime}</span>}
+                    </div>
                   </div>
                 )}
               </div>
