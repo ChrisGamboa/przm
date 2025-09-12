@@ -27,7 +27,7 @@ const demoJobs: Job[] = [
   {
     id: '2',
     jobNumber: '18',
-    status: 'waiting',
+    status: 'dispatched',
     priority: 'high',
     customerName: 'Downtown Auto Repair',
     customerPhone: '(555) 234-5678',

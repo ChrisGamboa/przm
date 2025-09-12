@@ -1,6 +1,6 @@
 import { defineScript } from "rwsdk/worker";
 import { db, setupDb } from "@/db";
-import { JobStatus } from "../../generated/prisma/enums";
+import { $Enums } from "@generated/prisma";
 
 export default defineScript(async ({ env }) => {
   await setupDb(env);
@@ -24,10 +24,11 @@ export default defineScript(async ({ env }) => {
 
   console.log("👤 Created test user:", testUser.username);
 
-  // Create 4 test tow jobs with different statuses
+  // Create 4 test tow jobs with different statuses and priorities
   const towJobs = [
     {
       id: "job-1",
+      jobNumber: "TJ-001",
       towerId: testUser.id,
       customerName: "Sarah Johnson",
       customerPhone: "(555) 123-4567",
@@ -43,13 +44,19 @@ export default defineScript(async ({ env }) => {
       dropoffLocation: "Auto Repair Shop, 456 Oak Ave",
       dropoffLatitude: 40.7589,
       dropoffLongitude: -73.9851,
-      status: JobStatus.PENDING,
+      distance: "5.2 mi",
+      estimatedTime: "12 min",
+      status: $Enums.JobStatus.WAITING,
+      priority: $Enums.JobPriority.HIGH,
       description: "Vehicle won't start, battery appears dead",
       estimatedCost: 125.00,
+      driverName: "Alex Thompson",
+      truckName: "Truck 01",
       scheduledAt: new Date("2025-01-15T10:00:00Z"),
     },
     {
       id: "job-2", 
+      jobNumber: "TJ-002",
       towerId: testUser.id,
       customerName: "Mike Rodriguez",
       customerPhone: "(555) 987-6543",
@@ -65,14 +72,20 @@ export default defineScript(async ({ env }) => {
       dropoffLocation: "Johnson's Auto Body, 789 Pine St",
       dropoffLatitude: 40.7505,
       dropoffLongitude: -73.9934,
-      status: JobStatus.EN_ROUTE,
+      distance: "18.7 mi",
+      estimatedTime: "25 min",
+      status: $Enums.JobStatus.EN_ROUTE,
+      priority: $Enums.JobPriority.URGENT,
       description: "Rear-ended in traffic accident, vehicle not drivable",
       estimatedCost: 200.00,
       actualCost: 185.00,
+      driverName: "Maria Santos",
+      truckName: "Truck 02",
       scheduledAt: new Date("2025-01-15T14:30:00Z"),
     },
     {
       id: "job-3",
+      jobNumber: "TJ-003",
       towerId: testUser.id,
       customerName: "Emily Chen",
       customerPhone: "(555) 456-7890",
@@ -88,15 +101,21 @@ export default defineScript(async ({ env }) => {
       dropoffLocation: "Owner's residence, 321 Elm Drive",
       dropoffLatitude: 40.7282,
       dropoffLongitude: -74.0776,
-      status: JobStatus.COMPLETED,
+      distance: "8.3 mi",
+      estimatedTime: "18 min",
+      status: $Enums.JobStatus.COMPLETED,
+      priority: $Enums.JobPriority.NORMAL,
       description: "Flat tire, customer needs vehicle moved to safe location",
       estimatedCost: 100.00,
       actualCost: 95.00,
+      driverName: "Tom Wilson",
+      truckName: "Truck 03",
       scheduledAt: new Date("2025-01-14T16:00:00Z"),
       completedAt: new Date("2025-01-14T17:15:00Z"),
     },
     {
       id: "job-4",
+      jobNumber: "TJ-004",
       towerId: testUser.id,
       customerName: "David Wilson",
       customerPhone: "(555) 321-0987",
@@ -112,9 +131,14 @@ export default defineScript(async ({ env }) => {
       dropoffLocation: "BMW Service Center, 555 Motor Pkwy",
       dropoffLatitude: 40.7749,
       dropoffLongitude: -73.9442,
-      status: JobStatus.IN_PROGRESS,
+      distance: "12.1 mi",
+      estimatedTime: "22 min",
+      status: $Enums.JobStatus.TOWING,
+      priority: $Enums.JobPriority.LOW,
       description: "Engine overheating, steam visible from hood",
       estimatedCost: 175.00,
+      driverName: "Lisa Park",
+      truckName: "Heavy Duty 01",
       scheduledAt: new Date("2025-01-15T11:45:00Z"),
     },
   ];

@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/app/components/ui/card";
 import { Badge } from "@/app/components/ui/badge";
 import { Button } from "@/app/components/ui/button";
 import { Separator } from "@/app/components/ui/separator";
-import { MapPin, Clock, Car, Phone, Navigation, AlertTriangle } from "lucide-react";
+import { MapPin, Clock, Car, Phone, Navigation, AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
 import { Job, JobStatus, JobPriority } from "@/app/types/job";
 import { cn } from "@/app/lib/utils";
 
@@ -13,6 +13,8 @@ interface JobCardProps {
   job: Job;
   onViewDetails?: (jobId: string) => void;
   onUpdateStatus?: (jobId: string) => void;
+  onAcceptJob?: (jobId: string) => void;
+  onDeclineJob?: (jobId: string) => void;
   className?: string;
 }
 
@@ -71,7 +73,7 @@ const priorityConfig: Record<JobPriority, { color: string; icon?: React.ReactNod
   },
 };
 
-export function JobCard({ job, onViewDetails, onUpdateStatus, className }: JobCardProps) {
+export function JobCard({ job, onViewDetails, onUpdateStatus, onAcceptJob, onDeclineJob, className }: JobCardProps) {
   const statusInfo = statusConfig[job.status];
   const priorityInfo = priorityConfig[job.priority];
 
@@ -182,7 +184,7 @@ export function JobCard({ job, onViewDetails, onUpdateStatus, className }: JobCa
           </div>
         </div>
 
-        {/* Cost and Actions */}
+        {/* Cost and Primary Actions */}
         <div className="flex items-center justify-between pt-2">
           <div className="text-sm">
             {job.estimatedCost && (
@@ -192,7 +194,8 @@ export function JobCard({ job, onViewDetails, onUpdateStatus, className }: JobCa
             )}
           </div>
           <div className="flex gap-2">
-            {job.status !== "completed" && job.status !== "cancelled" && (
+            {/* Show Update Status button for non-dispatched, non-completed, non-cancelled jobs */}
+            {job.status !== "dispatched" && job.status !== "completed" && job.status !== "cancelled" && (
               <Button 
                 variant="outline" 
                 size="sm"
@@ -212,6 +215,30 @@ export function JobCard({ job, onViewDetails, onUpdateStatus, className }: JobCa
             </Button>
           </div>
         </div>
+
+        {/* Accept/Decline Actions for Dispatched Jobs */}
+        {job.status === "dispatched" && (
+          <div className="flex justify-end gap-2 pt-2">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => onDeclineJob?.(job.id)}
+              className="text-xs text-red-600 border-red-200 hover:bg-red-50"
+            >
+              <XCircle className="h-3 w-3 mr-1" />
+              DECLINE
+            </Button>
+            <Button 
+              variant="default" 
+              size="sm"
+              onClick={() => onAcceptJob?.(job.id)}
+              className="text-xs bg-green-600 hover:bg-green-700"
+            >
+              <CheckCircle2 className="h-3 w-3 mr-1" />
+              ACCEPT
+            </Button>
+          </div>
+        )}
 
         {/* Driver and Truck Info */}
         {(job.driverName || job.truckName) && (

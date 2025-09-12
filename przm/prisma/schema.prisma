@@ -47,19 +47,27 @@ model Credential {
 }
 
 enum JobStatus {
-  PENDING
-  ASSIGNED
+  WAITING
+  DISPATCHED
   EN_ROUTE
   ON_SCENE
-  IN_PROGRESS
+  TOWING
   COMPLETED
   CANCELLED
 }
 
+enum JobPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
 model TowJob {
-  id                String    @id @default(uuid())
-  towerId           String    // Foreign key to User (the tower)
-  tower             User      @relation(fields: [towerId], references: [id])
+  id                String      @id @default(uuid())
+  jobNumber         String?      @default(cuid()) // Job tracking number with unique default
+  towerId           String      // Foreign key to User (the tower)
+  tower             User        @relation(fields: [towerId], references: [id])
   
   // Customer information
   customerName      String
@@ -74,26 +82,35 @@ model TowJob {
   vin               String?
   
   // Location information
-  pickupLocation    String    // Address or description
+  pickupLocation    String      // Address or description
   pickupLatitude    Float?
   pickupLongitude   Float?
-  dropoffLocation   String?   // Destination address
+  dropoffLocation   String?     // Destination address (maps to "destination" in UI)
   dropoffLatitude   Float?
   dropoffLongitude  Float?
+  distance          String?     // Calculated or estimated distance
+  estimatedTime     String?     // Estimated travel/completion time
   
   // Job details
-  status            JobStatus @default(PENDING)
-  description       String?   // Additional details about the job
+  status            JobStatus   @default(WAITING)
+  priority          JobPriority @default(NORMAL)
+  description       String?     // Additional details about the job
   estimatedCost     Float?
   actualCost        Float?
   
+  // Assignment information
+  driverName        String?     // Assigned driver name
+  truckName         String?     // Assigned truck/vehicle name
+  
   // Timestamps
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  scheduledAt       DateTime? // When the job is scheduled for
-  completedAt       DateTime? // When the job was completed
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  scheduledAt       DateTime?   // When the job is scheduled for
+  completedAt       DateTime?   // When the job was completed
   
   @@index([towerId])
   @@index([status])
+  @@index([priority])
   @@index([createdAt])
+  @@index([jobNumber])
 }

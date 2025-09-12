@@ -15,6 +15,8 @@ const meta: Meta<typeof JobQueueScreen> = {
   argTypes: {
     onViewDetails: { action: 'view details clicked' },
     onUpdateStatus: { action: 'update status clicked' },
+    onAcceptJob: { action: 'accept job clicked' },
+    onDeclineJob: { action: 'decline job clicked' },
     onRefresh: { action: 'refresh clicked' },
   },
 };
@@ -48,7 +50,7 @@ const sampleJobs: Job[] = [
   {
     id: '2',
     jobNumber: '18',
-    status: 'waiting',
+    status: 'dispatched',
     priority: 'high',
     customerName: 'Downtown Auto Repair',
     customerPhone: '(555) 234-5678',
@@ -176,9 +178,9 @@ export const OnlyUrgentJobs: Story = {
   },
 };
 
-export const OnlyWaitingJobs: Story = {
+export const OnlyInProgressJobs: Story = {
   args: {
-    jobs: sampleJobs.filter(job => job.status === 'waiting'),
+    jobs: sampleJobs.filter(job => ['en_route', 'on_scene', 'towing'].includes(job.status)),
   },
 };
 

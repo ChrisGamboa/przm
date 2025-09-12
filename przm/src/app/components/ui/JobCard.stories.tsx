@@ -15,6 +15,8 @@ const meta: Meta<typeof JobCard> = {
   argTypes: {
     onViewDetails: { action: 'view details clicked' },
     onUpdateStatus: { action: 'update status clicked' },
+    onAcceptJob: { action: 'accept job clicked' },
+    onDeclineJob: { action: 'decline job clicked' },
   },
 };
 
@@ -54,7 +56,7 @@ export const WaitingStatus: Story = {
   args: {
     job: {
       ...baseJob,
-      status: 'waiting',
+      status: 'dispatched',
       jobNumber: '18',
     },
   },
@@ -128,7 +130,7 @@ export const MinimalInfo: Story = {
     job: {
       id: '2',
       jobNumber: '26',
-      status: 'waiting',
+      status: 'dispatched',
       priority: 'low',
       customerName: 'John Smith',
       customerPhone: '(555) 987-6543',
@@ -159,6 +161,25 @@ export const NoDriverTruck: Story = {
       jobNumber: '28',
       driverName: undefined,
       truckName: undefined,
+    },
+  },
+};
+
+export const Dispatched: Story = {
+  args: {
+    job: {
+      ...baseJob,
+      status: 'dispatched',
+      priority: 'high',
+      jobNumber: '29',
+      description: 'Job dispatched to tower - awaiting acceptance',
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Dispatched job card showing Accept and Decline buttons. Towers must accept or decline jobs in this status.',
+      },
     },
   },
 };

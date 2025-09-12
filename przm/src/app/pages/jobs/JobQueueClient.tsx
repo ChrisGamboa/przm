@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
-import { JobCard } from "./JobCard";
+import React, { useState, useTransition } from "react";
+import { JobCard } from "@/app/components/ui/JobCard";
 import { Button } from "@/app/components/ui/button";
 import { Badge } from "@/app/components/ui/badge";
 import { ScrollArea } from "@/app/components/ui/scroll-area";
-import { Separator } from "@/app/components/ui/separator";
 import { 
   Filter, 
   SortAsc, 
@@ -17,15 +16,10 @@ import {
 } from "lucide-react";
 import { Job, JobStatus } from "@/app/types/job";
 import { cn } from "@/app/lib/utils";
+import { updateJobStatus, refreshJobs, getJobDetails, acceptJob, declineJob } from "./functions";
 
-interface JobQueueScreenProps {
+interface JobQueueClientProps {
   jobs: Job[];
-  onViewDetails?: (jobId: string) => void;
-  onUpdateStatus?: (jobId: string) => void;
-  onAcceptJob?: (jobId: string) => void;
-  onDeclineJob?: (jobId: string) => void;
-  onRefresh?: () => void;
-  className?: string;
 }
 
 const statusFilters: { value: JobStatus | "all" | "in_progress"; label: string; icon: React.ReactNode }[] = [
@@ -38,17 +32,11 @@ const statusFilters: { value: JobStatus | "all" | "in_progress"; label: string; 
   { value: "completed", label: "Completed", icon: <CheckCircle2 className="h-4 w-4" /> },
 ];
 
-export function JobQueueScreen({ 
-  jobs, 
-  onViewDetails, 
-  onUpdateStatus, 
-  onAcceptJob,
-  onDeclineJob,
-  onRefresh,
-  className 
-}: JobQueueScreenProps) {
+export function JobQueueClient({ jobs: initialJobs }: JobQueueClientProps) {
+  const [jobs, setJobs] = useState<Job[]>(initialJobs);
   const [selectedFilter, setSelectedFilter] = useState<JobStatus | "all" | "in_progress">("all");
   const [sortBy, setSortBy] = useState<"created" | "priority" | "status">("created");
+  const [isPending, startTransition] = useTransition();
 
   // Filter jobs based on selected status
   const filteredJobs = jobs.filter(job => {
@@ -83,8 +71,113 @@ export function JobQueueScreen({
     ["en_route", "on_scene", "towing"].includes(job.status)
   ).length;
 
+  const handleViewDetails = async (jobId: string) => {
+    startTransition(async () => {
+      try {
+        const jobDetails = await getJobDetails(jobId);
+        // For now, just log the details. In a real app, you might open a modal or navigate to a details page
+        console.log("Job details:", jobDetails);
+        alert(`Job Details:\n\nJob #${jobDetails.jobNumber}\nCustomer: ${jobDetails.customerName}\nStatus: ${jobDetails.status}\nPriority: ${jobDetails.priority}\n\nDescription: ${jobDetails.description || 'No description'}`);
+      } catch (error) {
+        console.error("Failed to fetch job details:", error);
+        alert("Failed to load job details. Please try again.");
+      }
+    });
+  };
+
+  const handleUpdateStatus = async (jobId: string) => {
+    const job = jobs.find(j => j.id === jobId);
+    if (!job) return;
+
+    // Cycle through status progression
+    const statusProgression: Record<JobStatus, JobStatus> = {
+      waiting: "dispatched",
+      dispatched: "en_route", 
+      en_route: "on_scene",
+      on_scene: "towing",
+      towing: "completed",
+      completed: "completed", // Already completed
+      cancelled: "cancelled", // Cancelled jobs stay cancelled
+    };
+
+    const nextStatus = statusProgression[job.status];
+    
+    if (nextStatus === job.status) {
+      alert(`Job is already ${job.status}. No update needed.`);
+      return;
+    }
+
+    startTransition(async () => {
+      try {
+        const updatedJob = await updateJobStatus(jobId, nextStatus);
+        
+        // Update the local state with the updated job
+        setJobs(prevJobs => 
+          prevJobs.map(j => j.id === jobId ? updatedJob : j)
+        );
+        
+        console.log(`Job ${jobId} status updated to ${nextStatus}`);
+      } catch (error) {
+        console.error("Failed to update job status:", error);
+        alert("Failed to update job status. Please try again.");
+      }
+    });
+  };
+
+  const handleRefresh = async () => {
+    startTransition(async () => {
+      try {
+        const refreshedJobs = await refreshJobs();
+        setJobs(refreshedJobs);
+        console.log("Job queue refreshed");
+      } catch (error) {
+        console.error("Failed to refresh jobs:", error);
+        alert("Failed to refresh job queue. Please try again.");
+      }
+    });
+  };
+
+  const handleAcceptJob = async (jobId: string) => {
+    startTransition(async () => {
+      try {
+        const updatedJob = await acceptJob(jobId);
+        
+        // Update the local state with the updated job
+        setJobs(prevJobs => 
+          prevJobs.map(j => j.id === jobId ? updatedJob : j)
+        );
+        
+        console.log(`Job ${jobId} accepted and moved to en_route`);
+      } catch (error) {
+        console.error("Failed to accept job:", error);
+        alert("Failed to accept job. Please try again.");
+      }
+    });
+  };
+
+  const handleDeclineJob = async (jobId: string) => {
+    const confirmed = confirm("Are you sure you want to decline this job? This action cannot be undone.");
+    if (!confirmed) return;
+
+    startTransition(async () => {
+      try {
+        const updatedJob = await declineJob(jobId);
+        
+        // Update the local state with the updated job
+        setJobs(prevJobs => 
+          prevJobs.map(j => j.id === jobId ? updatedJob : j)
+        );
+        
+        console.log(`Job ${jobId} declined and moved to cancelled`);
+      } catch (error) {
+        console.error("Failed to decline job:", error);
+        alert("Failed to decline job. Please try again.");
+      }
+    });
+  };
+
   return (
-    <div className={cn("flex flex-col h-screen bg-gray-50", className)}>
+    <div className="flex flex-col h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 p-4">
         <div className="flex items-center justify-between mb-4">
@@ -97,11 +190,12 @@ export function JobQueueScreen({
           <Button 
             variant="outline" 
             size="sm"
-            onClick={onRefresh}
+            onClick={handleRefresh}
+            disabled={isPending}
             className="gap-2"
           >
-            <RefreshCw className="h-4 w-4" />
-            Refresh
+            <RefreshCw className={cn("h-4 w-4", isPending && "animate-spin")} />
+            {isPending ? "Refreshing..." : "Refresh"}
           </Button>
         </div>
 
@@ -143,6 +237,7 @@ export function JobQueueScreen({
                   variant={isActive ? "default" : "outline"}
                   size="sm"
                   onClick={() => setSelectedFilter(filter.value)}
+                  disabled={isPending}
                   className={cn(
                     "flex items-center gap-2 whitespace-nowrap",
                     isActive && "shadow-sm"
@@ -182,6 +277,7 @@ export function JobQueueScreen({
                 variant={sortBy === sort.value ? "default" : "ghost"}
                 size="sm"
                 onClick={() => setSortBy(sort.value as any)}
+                disabled={isPending}
                 className="text-xs h-7"
               >
                 {sort.label}
@@ -214,10 +310,10 @@ export function JobQueueScreen({
               <JobCard
                 key={job.id}
                 job={job}
-                onViewDetails={onViewDetails}
-                onUpdateStatus={onUpdateStatus}
-                onAcceptJob={onAcceptJob}
-                onDeclineJob={onDeclineJob}
+                onViewDetails={handleViewDetails}
+                onUpdateStatus={handleUpdateStatus}
+                onAcceptJob={handleAcceptJob}
+                onDeclineJob={handleDeclineJob}
               />
             ))
           )}

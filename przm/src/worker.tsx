@@ -4,6 +4,8 @@ import { Document } from "@/app/Document";
 import { Home } from "@/app/pages/Home";
 import { setCommonHeaders } from "@/app/headers";
 import { userRoutes } from "@/app/pages/user/routes";
+import { jobRoutes } from "@/app/pages/jobs/routes";
+import { JobQueuePage } from "@/app/pages/jobs/JobQueuePage";
 import { sessions, setupSessionStore } from "./session/store";
 import { Session } from "./session/durableObject";
 import { type User, db, setupDb } from "@/db";
@@ -48,7 +50,8 @@ export default defineApp([
   },
   render(Document, [
     route("/", () => new Response("Hello, World!")),
-    route("/job-queue-demo", () => <JobQueueScreen jobs={[]} />),
+    route("/job-queue", JobQueuePage), // Direct access to server-side job queue
+    route("/job-queue-demo", () => <JobQueueScreen jobs={[]} />), // Original demo with empty data
     route("/protected", [
       ({ ctx }) => {
         if (!ctx.user) {
@@ -60,6 +63,8 @@ export default defineApp([
       },
       Home,
     ]),
+    // Job routes - no authentication required
+    prefix("/jobs", jobRoutes),
     prefix("/user", userRoutes),
   ]),
 ]);
