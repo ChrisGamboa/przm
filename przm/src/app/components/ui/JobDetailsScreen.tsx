@@ -117,6 +117,55 @@ export function JobDetailsScreen({
 
   const nextStatus = getNextStatus(job.status);
 
+  // Helper function to render the primary CTA button
+  const renderPrimaryCTA = () => {
+    // On Scene Data Collection - Primary CTA
+    if (job.status === "on_scene") {
+      return (
+        <Button 
+          className="w-full bg-purple-600 hover:bg-purple-700 text-white shadow-lg"
+          size="lg"
+          onClick={() => onCollectOnSceneData?.(job.id)}
+        >
+          <Car className="h-5 w-5 mr-2" />
+          Collect VIN, Photos & Verify Plate
+        </Button>
+      );
+    }
+
+    // Towing Dropoff - Primary CTA
+    if (job.status === "towing") {
+      return (
+        <Button 
+          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg"
+          size="lg"
+          onClick={() => onProcessDropoff?.(job.id)}
+        >
+          <CheckCircle2 className="h-5 w-5 mr-2" />
+          Process Dropoff & Payment
+        </Button>
+      );
+    }
+
+    // Update Status Button - Show for statuses except completed/cancelled/on_scene/towing
+    if (job.status !== "completed" && 
+        job.status !== "cancelled" && 
+        nextStatus) {
+      return (
+        <Button 
+          className="w-full shadow-lg"
+          size="lg"
+          onClick={() => onUpdateStatus?.(job.id, nextStatus)}
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Update Status to {statusConfig[nextStatus].label}
+        </Button>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <div className={cn("min-h-screen bg-gray-50 flex flex-col", className)}>
       {/* Header */}
@@ -146,8 +195,8 @@ export function JobDetailsScreen({
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      {/* Main Content - Add bottom padding for sticky CTA */}
+      <div className="flex-1 flex flex-col pb-20">
         {/* Route Map - Takes up 40% of viewport height */}
         <div className="h-[40vh] bg-white flex-shrink-0">
           <GoogleMap
@@ -317,51 +366,9 @@ export function JobDetailsScreen({
               <p className="text-sm text-gray-700">{job.description}</p>
             </div>
           )}
-
-          {/* Action Buttons */}
-          <div className="space-y-3">
-            {/* On Scene Data Collection - Primary CTA */}
-            {job.status === "on_scene" && (
-              <Button 
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-                size="lg"
-                onClick={() => onCollectOnSceneData?.(job.id)}
-              >
-                <Car className="h-5 w-5 mr-2" />
-                Collect VIN, Photos & Verify Plate
-              </Button>
-            )}
-
-            {/* Towing Dropoff - Primary CTA */}
-            {job.status === "towing" && (
-              <Button 
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
-                size="lg"
-                onClick={() => onProcessDropoff?.(job.id)}
-              >
-                <CheckCircle2 className="h-5 w-5 mr-2" />
-                Process Dropoff & Payment
-              </Button>
-            )}
-
-            {/* Update Status Button - Show for statuses except completed/cancelled/on_scene/towing */}
-            {job.status !== "completed" && 
-             job.status !== "cancelled" && 
-             job.status !== "on_scene" && 
-             job.status !== "towing" && 
-             nextStatus && (
-              <Button 
-                className="w-full"
-                onClick={() => onUpdateStatus?.(job.id, nextStatus)}
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Update Status to {statusConfig[nextStatus].label}
-              </Button>
-            )}
-          </div>
         </div>
 
-        {/* Progress Bar - Bottom of page */}
+        {/* Progress Bar */}
         <div className="bg-white border-t border-gray-200 p-4 flex-shrink-0">
           <h3 className="text-base font-semibold text-gray-900 mb-3">Job Progress</h3>
           <Progress value={progressPercentage} className="h-3 mb-2" />
@@ -375,6 +382,13 @@ export function JobDetailsScreen({
           </div>
         </div>
       </div>
+
+      {/* Sticky Bottom CTA */}
+      {renderPrimaryCTA() && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-lg z-10">
+          {renderPrimaryCTA()}
+        </div>
+      )}
     </div>
   );
 }

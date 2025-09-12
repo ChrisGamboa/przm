@@ -183,6 +183,55 @@ export async function declineJob(jobId: string) {
 }
 
 /**
+ * Submits on-scene data collection (VIN, license plate, photo)
+ */
+export async function submitOnSceneData(
+  jobId: string, 
+  data: {
+    vin: string;
+    licensePlate: string;
+    vehiclePhotoUrl?: string;
+    notes?: string;
+  }
+) {
+  try {
+    // Verify the job exists and belongs to the test user
+    const existingJob = await db.towJob.findFirst({
+      where: {
+        id: jobId,
+        towerId: TEST_USER_ID,
+      },
+    });
+
+    if (!existingJob) {
+      throw new Error("Job not found");
+    }
+
+    // Update the job with on-scene data
+    const updatedJob = await db.towJob.update({
+      where: {
+        id: jobId,
+      },
+      data: {
+        vin: data.vin,
+        licensePlate: data.licensePlate,
+        vehiclePhotoUrl: data.vehiclePhotoUrl,
+        description: data.notes ? 
+          (existingJob.description ? `${existingJob.description}\n\nOn-Scene Notes: ${data.notes}` : `On-Scene Notes: ${data.notes}`) 
+          : existingJob.description,
+        status: 'TOWING', // Automatically advance to towing status after data collection
+        updatedAt: new Date(),
+      },
+    });
+
+    return transformTowJobsToJobs([updatedJob])[0];
+  } catch (error) {
+    console.error("Error submitting on-scene data:", error);
+    throw new Error("Failed to submit on-scene data");
+  }
+}
+
+/**
  * Gets job statistics for the test user
  */
 export async function getJobStats() {

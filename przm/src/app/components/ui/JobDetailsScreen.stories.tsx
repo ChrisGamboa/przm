@@ -12,7 +12,7 @@ const meta: Meta<typeof JobDetailsScreen> = {
     },
     docs: {
       description: {
-        component: 'A redesigned job details screen that maximizes viewport usage with a prominent route map and efficient information hierarchy.',
+        component: 'A redesigned job details screen with a sticky bottom CTA button. The screen maximizes viewport usage with a prominent route map, efficient information hierarchy, and context-aware primary actions that remain accessible during scrolling.',
       },
     },
   },
@@ -93,7 +93,7 @@ export const OnSceneJob: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Shows the On Scene status with a prominent CTA button for data collection. The status update button is hidden, making the data collection the primary action.',
+        story: 'Shows the On Scene status with a sticky bottom CTA button for data collection. The button remains visible while scrolling through job details, making the data collection action always accessible.',
       },
     },
   },
@@ -109,7 +109,7 @@ export const TowingJob: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Shows the Towing status with a prominent CTA button for dropoff processing. The status update button is hidden, making the dropoff processing the primary action.',
+        story: 'Shows the Towing status with a sticky bottom CTA button for dropoff processing. The button stays fixed at the bottom for easy access while reviewing job details.',
       },
     },
   },
@@ -145,7 +145,7 @@ export const UrgentPriorityJob: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Urgent priority job in On Scene status. Notice only the data collection CTA button is shown, emphasizing the critical next action.',
+        story: 'Urgent priority job in On Scene status with sticky CTA. The data collection button remains prominently visible at the bottom, emphasizing the critical next action regardless of scroll position.',
       },
     },
   },
@@ -207,7 +207,7 @@ export const HighPriorityJobWithoutKeys: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'High priority job in Towing status without keys. Only the dropoff processing CTA button is shown, focusing on the completion action.',
+        story: 'High priority job in Towing status without keys. The sticky dropoff processing CTA button ensures the completion action is always accessible.',
       },
     },
   },

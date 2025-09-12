@@ -80,6 +80,7 @@ model TowJob {
   vehicleColor      String?
   licensePlate      String?
   vin               String?
+  vehiclePhotoUrl   String?     // URL or path to the uploaded vehicle photo
   
   // Location information
   pickupLocation    String      // Address or description

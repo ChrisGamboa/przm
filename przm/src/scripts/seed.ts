@@ -50,7 +50,7 @@ export default defineScript(async ({ env }) => {
       priority: $Enums.JobPriority.HIGH,
       description: "Vehicle won't start, battery appears dead",
       estimatedCost: 125.00,
-      driverName: "Alex Thompson",
+      driverName: "John Doe",
       truckName: "Truck 01",
       scheduledAt: new Date("2025-01-15T10:00:00Z"),
     },
@@ -79,7 +79,7 @@ export default defineScript(async ({ env }) => {
       description: "Rear-ended in traffic accident, vehicle not drivable",
       estimatedCost: 200.00,
       actualCost: 185.00,
-      driverName: "Maria Santos",
+      driverName: "John Doe",
       truckName: "Truck 02",
       scheduledAt: new Date("2025-01-15T14:30:00Z"),
     },
@@ -108,7 +108,7 @@ export default defineScript(async ({ env }) => {
       description: "Flat tire, customer needs vehicle moved to safe location",
       estimatedCost: 100.00,
       actualCost: 95.00,
-      driverName: "Tom Wilson",
+      driverName: "John Doe",
       truckName: "Truck 03",
       scheduledAt: new Date("2025-01-14T16:00:00Z"),
       completedAt: new Date("2025-01-14T17:15:00Z"),
@@ -137,9 +137,37 @@ export default defineScript(async ({ env }) => {
       priority: $Enums.JobPriority.LOW,
       description: "Engine overheating, steam visible from hood",
       estimatedCost: 175.00,
-      driverName: "Lisa Park",
+      driverName: "John Doe",
       truckName: "Heavy Duty 01",
       scheduledAt: new Date("2025-01-15T11:45:00Z"),
+    },
+    {
+      id: "job-5",
+      jobNumber: "TJ-005",
+      towerId: testUser.id,
+      customerName: "Lisa Anderson",
+      customerPhone: "(555) 654-3210",
+      vehicleMake: "Nissan",
+      vehicleModel: "Altima",
+      vehicleYear: 2022,
+      vehicleColor: "White",
+      licensePlate: "NIS2022",
+      vin: "1N4BL4BV9NC123456",
+      pickupLocation: "Shopping Center Parking Lot, 890 Commerce Blvd",
+      pickupLatitude: 40.7484,
+      pickupLongitude: -73.9857,
+      dropoffLocation: "Mechanic Shop, 432 Service Rd",
+      dropoffLatitude: 40.7589,
+      dropoffLongitude: -73.9851,
+      distance: "6.8 mi",
+      estimatedTime: "15 min",
+      status: $Enums.JobStatus.ON_SCENE,
+      priority: $Enums.JobPriority.NORMAL,
+      description: "Key locked inside vehicle, customer waiting on-site",
+      estimatedCost: 80.00,
+      driverName: "John Doe",
+      truckName: "Truck 01",
+      scheduledAt: new Date("2025-01-15T13:30:00Z"),
     },
   ];
 
@@ -151,5 +179,5 @@ export default defineScript(async ({ env }) => {
     console.log(`🚗 Created tow job: ${job.id} (${job.status})`);
   }
 
-  console.log("🌱 Finished seeding with 1 user and 4 tow jobs");
+  console.log("🌱 Finished seeding with 1 user and 5 tow jobs");
 });

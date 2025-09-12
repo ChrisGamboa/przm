@@ -11,14 +11,9 @@ interface JobDetailsClientProps {
 
 export function JobDetailsClient({ job }: JobDetailsClientProps) {
   const handleBack = () => {
+    // Always navigate back to the jobs list page
     if (typeof window !== "undefined") {
-      // Check if there's a previous page in history
-      if (window.history.length > 1) {
-        window.history.back();
-      } else {
-        // Fallback to jobs page
-        window.location.href = "/jobs";
-      }
+      window.location.href = "/jobs";
     }
   };
 
@@ -34,9 +29,8 @@ export function JobDetailsClient({ job }: JobDetailsClientProps) {
   };
 
   const handleCollectOnSceneData = (jobId: string) => {
-    // For now, show an alert - this will be implemented later
-    alert("On-scene data collection feature coming soon!");
-    // Future implementation: window.location.href = `/jobs/${jobId}/on-scene-data`;
+    // Navigate to the on-scene data collection page
+    window.location.href = `/jobs/${jobId}/on-scene-data-collection`;
   };
 
   const handleProcessDropoff = (jobId: string) => {
