@@ -46,7 +46,7 @@ export default defineScript(async ({ env }) => {
       dropoffLongitude: -73.9851,
       distance: "5.2 mi",
       estimatedTime: "12 min",
-      status: $Enums.JobStatus.WAITING,
+      status: $Enums.JobStatus.DISPATCHED,
       priority: $Enums.JobPriority.HIGH,
       description: "Vehicle won't start, battery appears dead",
       estimatedCost: 125.00,
