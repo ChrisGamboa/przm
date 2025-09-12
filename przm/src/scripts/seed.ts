@@ -8,8 +8,8 @@ export default defineScript(async ({ env }) => {
   await db.$executeRawUnsafe(`\
     DELETE FROM TowJob;
     DELETE FROM User;
-    DELETE FROM sqlite_sequence;
-  `);
+    `);
+    // DELETE FROM sqlite_sequence;
 
   // Create a test tower user
   const testUser = await db.user.create({
@@ -36,6 +36,7 @@ export default defineScript(async ({ env }) => {
       vehicleYear: 2018,
       vehicleColor: "Silver",
       licensePlate: "ABC123",
+      vin: "4T1BF1FK5JU123456",
       pickupLocation: "123 Main St, Downtown",
       pickupLatitude: 40.7128,
       pickupLongitude: -74.0060,
@@ -57,6 +58,7 @@ export default defineScript(async ({ env }) => {
       vehicleYear: 2020,
       vehicleColor: "Blue",
       licensePlate: "XYZ789",
+      vin: "19XFC2F59KE987654",
       pickupLocation: "Highway 101, Mile Marker 45",
       pickupLatitude: 40.6892,
       pickupLongitude: -74.0445,
@@ -79,6 +81,7 @@ export default defineScript(async ({ env }) => {
       vehicleYear: 2019,
       vehicleColor: "Red",
       licensePlate: "TRUCK99",
+      vin: "1FTEW1E54KFA56789",
       pickupLocation: "City Mall Parking Lot, Level 2",
       pickupLatitude: 40.7831,
       pickupLongitude: -73.9712,
@@ -102,6 +105,7 @@ export default defineScript(async ({ env }) => {
       vehicleYear: 2021,
       vehicleColor: "Black",
       licensePlate: "LUX2021",
+      vin: "5UXCR6C05M9A12345",
       pickupLocation: "Downtown Business District, 5th & Broadway",
       pickupLatitude: 40.7614,
       pickupLongitude: -73.9776,

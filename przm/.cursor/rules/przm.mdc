@@ -1,0 +1,15 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+For all requests, put in the context that this is a take home project for a startup interview. Make sure you follow RedwoodSDK and React best practices that have been outlined in the other rules.
+
+For every component, upon edits make sure you update or create Storybook stories as needed.
+
+Use out-of-the-box Shadcn components wherever possible. If they need modification, extend them into new components. Use Tailwind CSS for styling.
+
+All components should be built as React Server Components under the /components/ui screen if possible. Wherever possible when needing to fetch data, do this on the server side.
+
+All components should live under @/app/components/ui
