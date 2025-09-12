@@ -71,18 +71,9 @@ export function JobQueueClient({ jobs: initialJobs }: JobQueueClientProps) {
     ["en_route", "on_scene", "towing"].includes(job.status)
   ).length;
 
-  const handleViewDetails = async (jobId: string) => {
-    startTransition(async () => {
-      try {
-        const jobDetails = await getJobDetails(jobId);
-        // For now, just log the details. In a real app, you might open a modal or navigate to a details page
-        console.log("Job details:", jobDetails);
-        alert(`Job Details:\n\nJob #${jobDetails.jobNumber}\nCustomer: ${jobDetails.customerName}\nStatus: ${jobDetails.status}\nPriority: ${jobDetails.priority}\n\nDescription: ${jobDetails.description || 'No description'}`);
-      } catch (error) {
-        console.error("Failed to fetch job details:", error);
-        alert("Failed to load job details. Please try again.");
-      }
-    });
+  const handleViewDetails = (jobId: string) => {
+    // Navigate to the job details page
+    window.location.href = `/jobs/${jobId}`;
   };
 
   const handleUpdateStatus = async (jobId: string) => {

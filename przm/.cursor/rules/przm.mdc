@@ -6,6 +6,8 @@ alwaysApply: true
 
 For all requests, put in the context that this is a take home project for a startup interview. Make sure you follow RedwoodSDK and React best practices that have been outlined in the other rules.
 
+If you need to use the terminal, ensure you run `nvm use 22.19.0` first, so that you do not run into environment issues with Node.
+
 For every component, upon edits make sure you update or create Storybook stories as needed.
 
 Use out-of-the-box Shadcn components wherever possible. If they need modification, extend them into new components. Use Tailwind CSS for styling.

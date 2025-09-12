@@ -20,12 +20,12 @@ export const setCommonHeaders =
     // Explicitly disables access to specific browser features/APIs
     response.headers.set(
       "Permissions-Policy",
-      "geolocation=(), microphone=(), camera=()",
+      "geolocation=(self), microphone=(), camera=()",
     );
 
     // Defines trusted sources for content loading and script execution:
     response.headers.set(
       "Content-Security-Policy",
-      `default-src 'self'; script-src 'self' 'nonce-${nonce}' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; frame-src https://challenges.cloudflare.com; object-src 'none';`,
+      `default-src 'self'; script-src 'self' 'nonce-${nonce}' https://challenges.cloudflare.com https://maps.googleapis.com; style-src 'self' 'unsafe-inline'; frame-src https://challenges.cloudflare.com https://www.google.com; img-src 'self' data: https://maps.googleapis.com https://maps.gstatic.com; connect-src 'self' https://maps.googleapis.com; object-src 'none';`,
     );
   };

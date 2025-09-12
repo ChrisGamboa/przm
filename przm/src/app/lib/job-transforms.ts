@@ -87,6 +87,8 @@ export function transformTowJobToJob(towJob: TowJob): Job {
     vehicleYear: towJob.vehicleYear || 0, // Default to 0 if null
     vehicleColor: towJob.vehicleColor || undefined,
     licensePlate: towJob.licensePlate || undefined,
+    vin: towJob.vin || undefined,
+    keysAvailable: undefined, // This field isn't in the database yet
     
     // Location info
     pickupLocation: towJob.pickupLocation,

@@ -208,7 +208,14 @@ export function JobCard({ job, onViewDetails, onUpdateStatus, onAcceptJob, onDec
             <Button 
               variant="default" 
               size="sm"
-              onClick={() => onViewDetails?.(job.id)}
+              onClick={() => {
+                if (onViewDetails) {
+                  onViewDetails(job.id);
+                } else {
+                  // Default navigation to job details page
+                  window.location.href = `/jobs/${job.id}`;
+                }
+              }}
               className="text-xs"
             >
               VIEW DETAILS

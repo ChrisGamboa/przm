@@ -25,6 +25,8 @@ export interface Job {
   vehicleYear: number;
   vehicleColor?: string;
   licensePlate?: string;
+  vin?: string;
+  keysAvailable?: boolean;
   
   // Location info
   pickupLocation: string;
