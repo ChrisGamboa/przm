@@ -14,9 +14,8 @@ export function GoogleMap({ pickupLocation, destination, className }: GoogleMapP
   const createMapUrl = () => {
     const baseUrl = "https://www.google.com/maps/embed/v1/directions";
     
-    // For demo purposes, we'll use a placeholder API key
-    // In production, you would need a real Google Maps API key
-    const apiKey = "AIzaSyCrzVfsAuzzgIQCD4ALsLVZ0Lo6vH2izJM";
+     // Get Google Maps API key from environment variable
+     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     
     if (destination) {
       // Show directions from pickup to destination
@@ -111,9 +110,8 @@ export function GoogleMap({ pickupLocation, destination, className }: GoogleMapP
     </div>
   );
 
-  // For demo purposes, we'll show the fallback
-  // In production, replace with: const mapUrl = createMapUrl();
-  const isApiKeyConfigured = true;
+  // Check if API key is configured
+  const isApiKeyConfigured = Boolean(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
 
   if (!isApiKeyConfigured) {
     return (
