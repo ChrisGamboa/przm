@@ -26,7 +26,8 @@
     "types": "tsc",
     "prepare": "vibe-rules install cursor",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "db:setup": "npm run worker:run ./src/scripts/setup-database.ts && npm run seed"
   },
   "dependencies": {
     "@prisma/adapter-d1": "~6.8.2",
