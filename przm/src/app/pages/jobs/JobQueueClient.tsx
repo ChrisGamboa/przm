@@ -4,7 +4,7 @@ import React, { useState, useTransition } from "react";
 import { JobCard } from "@/app/components/ui/JobCard";
 import { Button } from "@/app/components/ui/button";
 import { Badge } from "@/app/components/ui/badge";
-import { ScrollArea } from "@/app/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/app/components/ui/scroll-area";
 import { 
   Filter, 
   SortAsc, 
@@ -188,8 +188,8 @@ export function JobQueueClient({ jobs: initialJobs }: JobQueueClientProps) {
 
 
         {/* Filter Tabs */}
-        <ScrollArea className="w-full whitespace-nowrap">
-          <div className="flex gap-2 pb-2">
+        <ScrollArea className="w-full">
+          <div className="flex gap-2 pb-2 min-w-max">
             {statusFilters.map((filter) => {
               let count: number;
               if (filter.value === "all") {
@@ -228,6 +228,7 @@ export function JobQueueClient({ jobs: initialJobs }: JobQueueClientProps) {
               );
             })}
           </div>
+          <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </div>
 

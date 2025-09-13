@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { JobCard } from "./JobCard";
 import { Button } from "@/app/components/ui/button";
 import { Badge } from "@/app/components/ui/badge";
-import { ScrollArea } from "@/app/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/app/components/ui/scroll-area";
 import { Separator } from "@/app/components/ui/separator";
 import { 
   Filter, 
@@ -103,8 +103,8 @@ export function JobQueueScreen({
 
 
         {/* Filter Tabs */}
-        <ScrollArea className="w-full whitespace-nowrap">
-          <div className="flex gap-2 pb-2">
+        <ScrollArea className="w-full">
+          <div className="flex gap-2 pb-2 min-w-max">
             {statusFilters.map((filter) => {
               let count: number;
               if (filter.value === "all") {
@@ -142,6 +142,7 @@ export function JobQueueScreen({
               );
             })}
           </div>
+          <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </div>
 
@@ -194,7 +195,6 @@ export function JobQueueScreen({
                 key={job.id}
                 job={job}
                 onViewDetails={onViewDetails}
-                onUpdateStatus={onUpdateStatus}
                 onAcceptJob={onAcceptJob}
                 onDeclineJob={onDeclineJob}
               />

@@ -190,3 +190,24 @@ export const SingleJob: Story = {
     },
   },
 };
+
+export const ManyJobsWithScrollableFilters: Story = {
+  args: {
+    jobs: [
+      ...mockJobs,
+      ...mockJobs.map((job, index) => ({
+        ...job,
+        id: `${job.id}-${index + 5}`,
+        jobNumber: `TJ-${String(index + 5).padStart(3, '0')}`,
+        status: ['waiting', 'dispatched', 'en_route', 'on_scene', 'towing', 'completed'][index % 6] as any,
+      })),
+    ],
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Job queue with many jobs to demonstrate horizontal scrolling of filter buttons. This ensures all filter tabs remain accessible even on narrow screens.',
+      },
+    },
+  },
+};
