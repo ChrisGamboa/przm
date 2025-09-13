@@ -1,62 +1,185 @@
-# Standard RedwoodSDK Starter
+# PRZM - Tow Truck Management System
 
-This "standard starter" is the recommended implementation for RedwoodSDK. You get a Typescript project with:
+A modern tow truck management system built with RedwoodSDK, featuring real-time job tracking, payment processing, and digital signatures. This is a take-home project for a startup interview.
 
-- Vite
-- database (Prisma via D1)
-- Session Management (via DurableObjects)
-- Passkey authentication (Webauthn)
-- Storage (via R2)
+## 🚛 Features
 
-## Creating your project
+- **Job Management**: Complete tow job lifecycle from dispatch to completion
+- **Real-time Tracking**: Live job status updates and progress tracking
+- **Payment Processing**: Integrated payment handling with digital signatures
+- **Mobile-First Design**: Responsive UI optimized for mobile devices
+- **Digital Signatures**: Customer and impound lot signature capture
+- **Photo Documentation**: Vehicle photo capture and storage
+- **Location Services**: GPS coordinates and address management
 
-```shell
-npx create-rwsdk my-project-name
-cd my-project-name
-npm install
+## 🛠️ Tech Stack
+
+### Core Technologies
+- **RedwoodSDK** (0.3.8) - Full-stack framework for Cloudflare Workers
+- **React** (19.1.2) - UI library with Server Components
+- **TypeScript** (5.8.3) - Type-safe development
+- **Vite** (6.2.6) - Build tool and dev server
+
+### Database & Storage
+- **Prisma** (6.8.2) - Database ORM with D1 adapter
+- **Cloudflare D1** - SQLite database
+- **Cloudflare Durable Objects** - Session management
+
+### UI & Styling
+- **Tailwind CSS** (4.1.13) - Utility-first CSS framework
+- **Radix UI** - Accessible component primitives
+- **Lucide React** - Icon library
+- **Shadcn/ui** - Pre-built component library
+
+
+### Development & Testing
+- **Storybook** (9.1.5) - Component development and testing
+- **Vitest** (3.2.4) - Unit and integration testing
+- **Playwright** (1.55.0) - End-to-end testing
+
+### Deployment
+- **Cloudflare Workers** - Serverless deployment
+- **Wrangler** (4.20.5) - Cloudflare Workers CLI
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 22.19.0 (use `nvm use 22.19.0`)
+- npm or pnpm
+- Cloudflare account
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd przm
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment**
+   ```bash
+   # Generate Prisma client and types
+   npm run generate
+   ```
+
+4. **Set up the database**
+   ```bash
+   # Run database migrations
+   npm run migrate:dev
+   
+   # Seed the database with sample data
+   npm run seed
+   ```
+
+5. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+6. **Open your browser**
+   Navigate to `http://localhost:5173` to view the application.
+
+### Development Commands
+
+```bash
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Run database migrations
+npm run migrate:dev
+
+# Seed database
+npm run seed
+
+# Run tests
+npm run test
+
+# Start Storybook
+npm run storybook
+
+# Type checking
+npm run types
 ```
 
-## Running the dev server
+## 📱 Application Structure
 
-```shell
-pnpm run dev
+### Core Pages
+- **Home** (`/`) - Landing page
+- **Job Queue** (`/job-queue`) - Main job management interface
+- **Job Details** (`/jobs/:id`) - Individual job details and management
+
+### Key Components
+- **JobQueueScreen** - Main job listing and management
+- **JobCard** - Individual job display component
+- **JobDetailsScreen** - Detailed job view and editing
+- **PaymentForm** - Payment processing interface
+- **SignatureCanvas** - Digital signature capture
+
+### Database Models
+- **User** - Tower company users
+- **TowJob** - Complete job information including:
+  - Customer and vehicle details
+  - Location and timing information
+  - Payment and signature data
+  - Status tracking and assignments
+
+## 🔧 Configuration
+
+### Wrangler Configuration
+The project uses Cloudflare Workers with the following bindings:
+- **D1 Database**: `przm-grim-coyote` for data persistence
+- **Durable Objects**: Session management
+
+### Database Schema
+The application uses a comprehensive schema supporting:
+- User management
+- Job lifecycle management with status tracking
+- Payment processing with multiple methods
+- Digital signature storage
+- Location and vehicle information
+
+## 🚀 Deployment
+
+### Local Development
+```bash
+# Ensure you're using the correct Node version
+nvm use 22.19.0
+
+# Start the development server
+npm run dev
 ```
 
-Point your browser to the URL displayed in the terminal (e.g. `http://localhost:5173/`). You should see a "Hello World" message in your browser.
-
-## Deploying your app
-
-### Wrangler Setup
-
-Within your project's `wrangler.jsonc`:
-
-- Replace the `__change_me__` placeholders with a name for your application
-
-- Create a new D1 database:
-
-```shell
-npx wrangler d1 create my-project-db
+### Production Deployment
+```bash
+# Build and deploy to Cloudflare Workers
+npm run release
 ```
 
-Copy the database ID provided and paste it into your project's `wrangler.jsonc` file:
+### Database Setup
+1. Create a D1 database in Cloudflare dashboard
+2. Update `wrangler.jsonc` with your database ID
+3. Run migrations: `npm run migrate:prd`
 
-```jsonc
-{
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "my-project-db",
-      "database_id": "your-database-id",
-    },
-  ],
-}
-```
-
-### Authentication Setup
-
-For authentication setup and configuration, including optional bot protection, see the [Authentication Documentation](https://docs.rwsdk.com/core/authentication).
-
-## Further Reading
+## 📚 Additional Resources
 
 - [RedwoodSDK Documentation](https://docs.rwsdk.com/)
-- [Cloudflare Workers Secrets](https://developers.cloudflare.com/workers/runtime-apis/secrets/)
+- [Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)
+- [Prisma Documentation](https://www.prisma.io/docs/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+
+## 👨‍💻 Author
+
+**Christian Gamboa** - Take-home project for startup interview
+
+---
+
+*Built with ❤️ using RedwoodSDK and modern web technologies*

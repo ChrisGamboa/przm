@@ -49,7 +49,10 @@ export default defineApp([
     }
   },
   render(Document, [
-    route("/", () => new Response("Hello, World!")),
+    route("/", () => new Response(null, {
+      status: 302,
+      headers: { Location: "/jobs" },
+    })),
     route("/job-queue", JobQueuePage), // Direct access to server-side job queue
     route("/job-queue-demo", () => <JobQueueScreen jobs={[]} />), // Original demo with empty data
     route("/protected", [
