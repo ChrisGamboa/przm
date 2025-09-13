@@ -72,6 +72,17 @@ A modern tow truck management system built with RedwoodSDK, featuring real-time 
    npm run dev
    ```
 
+5. **Follow the .env.example file (database_url not needed for local)**
+   ```bash
+   WEBAUTHN_RP_ID=localhost
+   AUTH_SECRET_KEY=your-development-secret-key
+   DATABASE_URL=your-db-url
+   VITE_GOOGLE_MAPS_API_KEY=your-google-maps-api-key
+   # Optional: Enable Turnstile bot protection
+   # TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+   ```
+
+
 Note: Trying to save you time here. I did a hacky DB setup script because otherwise you would need to run `npm run dev` and then, find your path to your local D1 path, add it to environment variables, run the migrations, etc etc due to Cloudflare/Wrangler initial set up.
 
 ### Development Commands
