@@ -5,11 +5,13 @@ import { $Enums } from "@generated/prisma";
 export default defineScript(async ({ env }) => {
   await setupDb(env);
 
-  await db.$executeRawUnsafe(`\
-    DELETE FROM TowJob;
-    DELETE FROM User;
-    `);
-    // DELETE FROM sqlite_sequence;
+  // Clear existing data if tables exist
+  try {
+    await db.$executeRawUnsafe(`DELETE FROM TowJob;`);
+    await db.$executeRawUnsafe(`DELETE FROM User;`);
+  } catch (error) {
+    console.log("Tables don't exist yet, skipping cleanup");
+  }
 
   // Create a test tower user
   const testUser = await db.user.create({
