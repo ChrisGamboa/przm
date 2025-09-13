@@ -72,6 +72,8 @@ A modern tow truck management system built with RedwoodSDK, featuring real-time 
    npm run dev
    ```
 
+Note: Trying to save you time here. I did a hacky DB setup script because otherwise you would need to run `npm run dev` and then, find your path to your local D1 path, add it to environment variables, run the migrations, etc etc due to Cloudflare/Wrangler initial set up.
+
 ### Development Commands
 
 ```bash
