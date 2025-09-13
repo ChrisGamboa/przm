@@ -62,28 +62,15 @@ A modern tow truck management system built with RedwoodSDK, featuring real-time 
    npm install
    ```
 
-3. **Set up environment**
+3. **Set up the database**
    ```bash
-   # Generate Prisma client and types
-   npm run generate
+   npm run db:setup
    ```
 
-4. **Set up the database**
-   ```bash
-   # Run database migrations
-   npm run migrate:dev
-   
-   # Seed the database with sample data
-   npm run seed
-   ```
-
-5. **Start the development server**
+4. **Start the development server**
    ```bash
    npm run dev
    ```
-
-6. **Open your browser**
-   Navigate to `http://localhost:5173` to view the application.
 
 ### Development Commands
 
