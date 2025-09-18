@@ -38,6 +38,9 @@ export default defineConfig({
           }]
         },
         setupFiles: ['.storybook/vitest.setup.ts']
+      },
+      resolve: {
+        dedupe: ['react', 'react-dom']
       }
     }]
   }

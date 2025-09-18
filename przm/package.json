@@ -45,10 +45,13 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.544.0",
-    "react-signature-canvas": "^1.1.0-alpha.2",
+  "react-signature-canvas": "^1.1.0-alpha.2",
     "rwsdk": "0.3.8",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.1.13"
+    "tailwindcss": "^4.1.13",
+    "react": "19.2.0-canary-39cad7af-20250411",
+    "react-dom": "19.2.0-canary-39cad7af-20250411",
+    "react-server-dom-webpack": "19.2.0-canary-39cad7af-20250411"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.1",
@@ -72,6 +75,76 @@
     "vite": "^6.2.6",
     "vitest": "^3.2.4",
     "wrangler": "^4.20.5"
+  },
+  "overrides": {
+    "@radix-ui/react-avatar": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@radix-ui/*": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@radix-ui/react-dialog": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@radix-ui/react-progress": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@radix-ui/react-scroll-area": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@radix-ui/react-separator": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@radix-ui/react-slot": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@radix-ui/react-tooltip": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@radix-ui/react-popover": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@radix-ui/react-dropdown-menu": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@radix-ui/react-tabs": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@radix-ui/react-accordion": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@radix-ui/react-checkbox": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@radix-ui/react-radio-group": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "lucide-react": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "react-signature-canvas": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@storybook/react-vite": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    }
   },
   "pnpm": {
     "onlyBuiltDependencies": [
